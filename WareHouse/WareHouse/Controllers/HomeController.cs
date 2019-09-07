@@ -16,7 +16,15 @@ namespace WareHouse.Controllers
 
 		public ActionResult Index()
 		{
+			ViewBag.UserName = Session["UserName"];
 			return View();
+		}
+
+		[HttpPost]
+		public ActionResult LogOut()
+		{
+			Session.Abandon();
+			return RedirectToAction("Login");
 		}
 
 		[HttpGet]
@@ -94,9 +102,29 @@ namespace WareHouse.Controllers
 			return sBuilder.ToString();
 		}
 
-		public ActionResult Contact()
+		[HttpGet]
+		public ActionResult SendProduct()
 		{
-			ViewBag.Message = "Your contact page.";
+			return View();
+		}
+
+		[HttpPost]
+		public ActionResult SendProduct(ProductQuantityModel model)
+		{
+			if (Session["UserID"] == null) RedirectToAction("Login");
+			if (model == null) return Json(new { Error = true, Message = "Quantity cannot be empty." }, JsonRequestBehavior.AllowGet);
+
+			using (var context = new WareHouseEntities())
+			{
+				var userID = Session["UserID"];
+				var user = context.Users.Find(userID);
+
+				if(user != null)
+				{
+					user.Quantity += model.Quantity;
+					context.SaveChanges();
+				}
+			}
 
 			return View();
 		}

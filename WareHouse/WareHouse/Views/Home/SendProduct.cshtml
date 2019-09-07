@@ -1,0 +1,49 @@
+﻿@model WareHouse.Models.ProductQuantityModel
+
+@{
+	ViewBag.Title = "Send product";
+}
+<br />
+<br />
+<h2>@ViewBag.Title.</h2>
+<br />
+<br />
+@using (Ajax.BeginForm("SendProduct", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSubmitSuccess", OnFailure = "OnSubmitFailure", OnBegin = "ValidateForm" }))
+{
+	<div class="form-row">
+		@Html.ValidationSummary(true) <br />
+		@Html.LabelFor(m => m.Quantity) <br />
+		@Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", placeholder = "Quantity" } })
+		@Html.ValidationMessageFor(m => m.Quantity)
+	</div>
+
+	<br />
+	<div class="form-row">
+		<button id="btnAdd" type="submit" class="btn btn-primary">Add</button>
+	</div>
+
+}
+
+@section scripts
+{
+	<script type="text/javascript">
+		function OnSubmitSuccess(data) {
+			if (data.Error == true) {
+				alert(data.Message);
+			}
+			else {
+				alert(data.Message);
+			}
+		}
+
+		function ValidateForm() {
+			return $('form').validate().form();
+		}
+
+		function OnSubmitFailure(data) {
+			if (data.Error == true) {
+				alert(data.Message);
+			}
+		}
+	</script>
+}

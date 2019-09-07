@@ -19,14 +19,14 @@
 			<div class="row">
 				@Html.ValidationSummary(true) <br />
 				@Html.LabelFor(m => m.UserName) <br />
-				@Html.TextBoxFor(m => m.UserName)
+				@Html.EditorFor(model => model.UserName, new { htmlAttributes = new {@class="form-control", placeholder="User name"}})
 				@Html.ValidationMessageFor(m => m.UserName)
 			</div>
 
 			<div class="row">
 				@Html.ValidationSummary(true) <br />
 				@Html.LabelFor(m => m.Password) <br />
-				@Html.TextBoxFor(m => m.Password)
+				@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "password", type = "Password" } })
 				@Html.ValidationMessageFor(m => m.Password)
 			</div>
 		</div>
@@ -48,10 +48,6 @@
 			if (data.Error == true) {
 				alert(data.Message);
 			}
-			@*else {
-				var url = '@Url.Action("Index", "Home")';
-				window.location.href = url;
-			}*@
 		}
 
 		function ValidateForm() {
@@ -62,7 +58,6 @@
 			if (data.Error == true) {
 				alert(data.Message);
 			}
-			alert("Login failed.");
 		}
 	</script>
 }

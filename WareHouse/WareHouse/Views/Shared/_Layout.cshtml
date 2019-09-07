@@ -8,9 +8,8 @@
 	@Scripts.Render("~/bundles/modernizr")
 	<script language="JavaScript" type="text/javascript" src="/Scripts/jquery-3.3.1.min.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/Scripts/jquery-ui-1.12.1.js"></script>
-	@*<script language="JavaScript" type="text/javascript" src="/Scripts/sprinkle.js"></script>*@
-	<script src="/Scripts/jquery.validate.js"></script>
-	<script src="/Scripts/jquery.validation.unobtrusive.js"></script>
+	<script language="JavaScript" type="text/javascript" src="/Scripts/jquery.validate.js"></script>
+	<script language="JavaScript" type="text/javascript" src="/Scripts/jquery.validate.unobtrusive.js"></script>
 </head>
 <body>
 	@if (Session["UserName"] != null && Session["UserID"] != null)
@@ -23,15 +22,19 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					@Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+					@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li>@Html.ActionLink("Home", "Index", "Home")</li>
-						<li>@Html.ActionLink("About", "About", "Home")</li>
-						<li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+						<li>@Html.ActionLink("SendProduct", "SendProduct", "Home")</li>
 					</ul>
 				</div>
+				@using (Html.BeginForm("LogOut", "Home", FormMethod.Post))
+				{
+					<div class="nav navbar-nav navbar-right">
+						<button id="btnLogout" type="submit" class="btn btn-secondary">Log out</button>
+					</div>
+				}
 			</div>
 		</div>
 	}
@@ -40,7 +43,7 @@
 		@RenderBody()
 		<hr />
 		<footer>
-			<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+			<p>&copy; 7.9.2019 - Simo Pöysä</p>
 		</footer>
 	</div>
 
