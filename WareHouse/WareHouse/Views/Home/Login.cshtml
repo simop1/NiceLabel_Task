@@ -1,0 +1,62 @@
+﻿@model WareHouse.Models.LoginModel
+
+@{
+	ViewBag.Title = "Login";
+}
+
+<div>
+	@using (Ajax.BeginForm("Login", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSubmitSuccess", OnFailure = "OnSubmitFailure", OnBegin = "ValidateForm" }))
+	{
+		@Html.AntiForgeryToken()
+
+		<div class="row">
+			<h2>@ViewBag.Title</h2>
+			<br />
+			<span>You can login with your user name or email.</span>
+		</div>
+
+		<div class="form-row">
+			<br />
+			<div class="row">
+				@Html.ValidationSummary(true) <br />
+				@Html.LabelFor(m => m.UserName) <br />
+				@Html.TextBoxFor(m => m.UserName)
+				@Html.ValidationMessageFor(m => m.UserName)
+			</div>
+
+			<div class="row">
+				@Html.ValidationSummary(true) <br />
+				@Html.LabelFor(m => m.Password) <br />
+				@Html.TextBoxFor(m => m.Password)
+				@Html.ValidationMessageFor(m => m.Password)
+			</div>
+		</div>
+		<br />
+
+		<div class="row">
+			<button id="btnLogin" type="submit" class="btn btn-primary">Login</button>
+		</div>
+		<br />
+	}
+
+</div>
+
+@section scripts
+{
+	<script type="text/javascript">
+
+		function OnSubmitSuccess(data) {
+			if (data.Error == true) {
+				alert(data.Message);
+			}
+		}
+
+		function ValidateForm() {
+			return $('form').validate().form();
+		}
+
+		function OnSubmitFailure(data) {
+			alert("Login failed.");
+		}
+	</script>
+}
