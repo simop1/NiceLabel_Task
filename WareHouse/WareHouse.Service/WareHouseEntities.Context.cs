@@ -12,18 +12,20 @@ namespace WareHouse.Service
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
-    public partial class Entities : DbContext
+	using System.Data.Entity.ModelConfiguration.Conventions;
+
+	public partial class WareHouseEntities : DbContext
     {
-        public Entities()
-            : base("name=Entities")
+        public WareHouseEntities()
+            : base("name=WareHouseEntities")
         {
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+			modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             throw new UnintentionalCodeFirstException();
-        }
+		}
     
         public virtual DbSet<User> Users { get; set; }
     }

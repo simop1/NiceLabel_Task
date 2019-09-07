@@ -21,7 +21,7 @@ namespace WareHouse.Service
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		Entities context = new Entities();
+		WareHouseEntities context = new WareHouseEntities();
 		CollectionViewSource userViewSource;
 
 		public MainWindow()

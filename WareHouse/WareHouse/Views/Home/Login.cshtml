@@ -1,5 +1,4 @@
 ﻿@model WareHouse.Models.LoginModel
-
 @{
 	ViewBag.Title = "Login";
 }
@@ -49,6 +48,10 @@
 			if (data.Error == true) {
 				alert(data.Message);
 			}
+			@*else {
+				var url = '@Url.Action("Index", "Home")';
+				window.location.href = url;
+			}*@
 		}
 
 		function ValidateForm() {
@@ -56,6 +59,9 @@
 		}
 
 		function OnSubmitFailure(data) {
+			if (data.Error == true) {
+				alert(data.Message);
+			}
 			alert("Login failed.");
 		}
 	</script>

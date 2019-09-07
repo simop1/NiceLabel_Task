@@ -12,7 +12,7 @@ namespace WareHouse.Controllers
 {
 	public class HomeController : Controller
 	{
-		Entities context = new Entities();
+		WareHouseEntities context = new WareHouseEntities();
 
 		public ActionResult Index()
 		{
@@ -29,37 +29,37 @@ namespace WareHouse.Controllers
 		[HttpPost]
 		public ActionResult Login(LoginModel model)
 		{
-			var dbUsers = context.Users;
-
 			if (model == null) return Json(new { Error = true, Message = "Fill the login info." }, JsonRequestBehavior.AllowGet);
 
-			var user = dbUsers.FirstOrDefault(x => x.UserName == model.UserName);
-
-			if (user == null) return Json(new { Error = true, Message = "Incorrect username or password." }, JsonRequestBehavior.AllowGet);
-
-			string inputHash = "";
-			bool correctPassword;
-			using (MD5 md5Hash = MD5.Create())
+			using (var context = new WareHouseEntities())
 			{
-				inputHash = GetMd5Hash(md5Hash, model.Password);
+				var user = context.Users.FirstOrDefault();
+				if (user == null) return Json(new { Error = true, Message = "Incorrect username or password." }, JsonRequestBehavior.AllowGet);
 
-				if (VerifyMd5Hash(md5Hash, inputHash, user.Password))
+				string inputHash = "";
+				bool correctPassword;
+				using (MD5 md5Hash = MD5.Create())
 				{
-					correctPassword = true;
+					inputHash = GetMd5Hash(md5Hash, model.Password);
+
+					if (VerifyMd5Hash(md5Hash, inputHash, user.Password))
+					{
+						correctPassword = true;
+					}
+					else
+					{
+						correctPassword = false;
+					}
 				}
-				else
-				{
-					correctPassword = false;
-				}
+
+				if (!correctPassword) return Json(new { Error = true, Message = "Incorrect username or password." });
+
+				Session["UserName"] = user.UserName;
+				Session["UserID"] = user.UserID;
+
+				return RedirectToAction("Index", "Home");
 			}
-
-			if (!correctPassword) return Json(new { Error = true, Message = "Incorrect username or password." });
-
-			Session["UserName"] = user.UserName;
-
-			return RedirectToAction("Index", "Home");
 		}
-
 
 		static bool VerifyMd5Hash(MD5 md5Hash, string inputHash, string dbHash)
 		{
