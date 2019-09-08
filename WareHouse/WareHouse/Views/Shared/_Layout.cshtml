@@ -15,29 +15,31 @@
 <body>
 	@if (Session["UserName"] != null && Session["UserID"] != null)
 	{
-		<div class="navbar navbar-inverse navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-				</div>
-				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						<li>@Html.ActionLink("SendProduct", "SendProduct", "Home")</li>
-					</ul>
-				</div>
-				@using (Html.BeginForm("LogOut", "Home", FormMethod.Post))
-				{
-					<div class="nav navbar-nav navbar-right">
-						<button id="btnLogout" type="submit" class="btn btn-secondary">Log out</button>
-					</div>
-				}
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li>@Html.ActionLink("SendProduct", "SendProduct", "Home")</li>
+					<li>
+						@using (Html.BeginForm("LogOut", "Home", FormMethod.Post))
+						{
+							<div class="nav navbar-nav navbar-right">
+								<button id="btnLogout" type="submit" class="btn btn-secondary">Log out</button>
+							</div>
+						}
+					</li>
+				</ul>
 			</div>
 		</div>
+	</div>
 	}
 
 	<div class="container body-content">

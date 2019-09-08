@@ -16,6 +16,9 @@ namespace WareHouse.Controllers
 
 		public ActionResult Index()
 		{
+			if (Session["UserName"] == null)
+				return RedirectToAction("Login");
+
 			ViewBag.UserName = Session["UserName"];
 			return View();
 		}
@@ -105,16 +108,20 @@ namespace WareHouse.Controllers
 		[HttpGet]
 		public ActionResult SendProduct()
 		{
-			if (Session["UserID"] == null) RedirectToAction("Login");
-			return View();
+			if (Session["UserID"] == null)
+				return RedirectToAction("Login");
+			else
+				return View();
 		}
 
 		[HttpPost]
 		public ActionResult SendProduct(ProductQuantityModel model)
 		{
-			if (Session["UserID"] == null) RedirectToAction("Login");
+			if (Session["UserID"] == null)
+				return RedirectToAction("Login");
 
-			if (model == null) return View();//return Json(new { Error = true, Message = "Quantity cannot be empty." }, JsonRequestBehavior.AllowGet);
+			if (model == null)
+				return View();
 
 			using (var context = new WareHouseEntities())
 			{
@@ -130,8 +137,7 @@ namespace WareHouse.Controllers
 				}
 			}
 
-
-			return View();//Json(new { Error = false, Message = "Quantity added successfully" }, JsonRequestBehavior.AllowGet);
+			return View();
 		}
 	}
 }

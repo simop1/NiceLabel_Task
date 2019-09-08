@@ -22,3 +22,22 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#btnLogout {
+	margin-left: 150px;
+	margin-top: 7px;
+}
+
+
+@media (max-width:767px){
+	#btnLogout {
+		margin-top: 7px;
+		margin-left: 30px;
+	}
+
+	body {
+		padding-top: 50px;
+		padding-bottom: 20px;
+		padding-left: 40px;
+	}
+}
