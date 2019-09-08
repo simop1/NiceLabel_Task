@@ -139,5 +139,49 @@ namespace WareHouse.Controllers
 
 			return View();
 		}
+
+		[HttpPost]
+		public ActionResult CreateUser()
+		{
+			NewUserModel model = new NewUserModel();
+
+			return PartialView("CreateUser", model);
+		}
+
+		[HttpPost]
+		public ActionResult SaveUser(NewUserModel model)
+		{
+			if (model == null) return Json(new { Error = true, Message = "Check the input fields." }, JsonRequestBehavior.AllowGet);
+
+			string hash = "";
+			using (MD5 md5Hash = MD5.Create())
+			{
+				hash = GetMd5Hash(md5Hash, model.Password);
+			}
+
+			if (hash == "") return Json(new { Error = true, Message = "Error in adding user." }, JsonRequestBehavior.AllowGet);
+
+			//check if username is in use
+			using (var context = new WareHouseEntities())
+			{
+				var users = context.Users;
+
+				var userNameTaken = users.FirstOrDefault(x => x.UserName == model.UserName) != null;
+
+				if (userNameTaken) return Json(new { Error = true, Message = "User name is taken." }, JsonRequestBehavior.AllowGet);
+
+				User newUser = new User()
+				{
+					UserName = model.UserName,
+					Password = hash,
+					Quantity = 0
+				};
+
+				context.Users.Add(newUser);
+				context.SaveChanges();
+
+				return Json(new { Error = false, Message = "User created successfully." }, JsonRequestBehavior.AllowGet);
+			}
+		}
 	}
 }

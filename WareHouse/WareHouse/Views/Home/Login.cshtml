@@ -3,15 +3,13 @@
 	ViewBag.Title = "Login";
 }
 
-<div>
-	@using (Ajax.BeginForm("Login", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSubmitSuccess", OnFailure = "OnSubmitFailure"}))
+<div class="row">
+	@using (Ajax.BeginForm("Login", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSubmitSuccess", OnFailure = "OnSubmitFailure" }))
 	{
 		@Html.AntiForgeryToken()
 
 		<div class="row">
 			<h2>@ViewBag.Title</h2>
-			<br />
-			<span>You can login with your user name or email.</span>
 		</div>
 
 		<div class="form-row">
@@ -19,14 +17,14 @@
 			<div class="row">
 				@Html.ValidationSummary(true) <br />
 				@Html.LabelFor(m => m.UserName) <br />
-				@Html.EditorFor(model => model.UserName, new { htmlAttributes = new {@class="form-control", placeholder="User name"}})
+				@Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", placeholder = "User name" } })
 				@Html.ValidationMessageFor(m => m.UserName)
 			</div>
 
 			<div class="row">
 				@Html.ValidationSummary(true) <br />
 				@Html.LabelFor(m => m.Password) <br />
-				@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "password", type = "Password" } })
+				@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password", type = "Password" } })
 				@Html.ValidationMessageFor(m => m.Password)
 			</div>
 		</div>
@@ -35,17 +33,45 @@
 		<div class="row">
 			<button id="btnLogin" type="submit" class="btn btn-primary">Login</button>
 		</div>
-		<br />
+		<br /><br />
 	}
+</div>
 
+<div style="margin-left:-30px;" class="row">
+	<span>Create account</span>
+	<button id="btnCreateUser" type="submit" class="btn btn-primary">Register</button>
+</div>
+
+<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+		</div>
+	</div>
 </div>
 
 @section scripts
 {
 	<script type="text/javascript">
 
+		$("#btnCreateUser").on("click", function(e) {
+			$.ajax({
+				type: "POST",
+				datatype: "json",
+				contenttype: 'application/json; charset=utf-8',
+				url: '@Url.Action("CreateUser", "Home")',
+				data: { UserID: -1 },
+				success: function (data) {
+					$('#createUserModal .modal-content').html(data);
+					$('#createUserModal').modal('show');
+				},
+				error: function () {
+					alert("Failed adding user");
+				}
+			});
+		});
+
 		function OnSubmitSuccess(data) {
-			if (data.Error == true) {
+			if (data.Error) {
 				alert(data.Message);
 			}
 			else {

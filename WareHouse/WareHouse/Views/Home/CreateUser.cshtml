@@ -1,0 +1,54 @@
+﻿@model WareHouse.Models.NewUserModel
+
+@{ var title = "Create user";}
+
+
+<div class="modal-header">
+	<h4 class="modal-title">@title<br /></h4>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+@using (Ajax.BeginForm("SaveUser", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSubmitSuccess", OnFailure = "OnSubmitFailure" }))
+{
+	@Html.AntiForgeryToken()
+	<div class="modal-body">
+		<div id="user-Error" class="row">
+			<div class="col-md">
+				<span class="text-danger">
+				</span>
+			</div>
+		</div>
+
+		<div class="form-row">
+			<div class="form-group">
+				@Html.ValidationSummary(true) <br />
+				@Html.LabelFor(m => m.UserName) <br />
+				@Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", placeholder = "User name" } })
+				@Html.ValidationMessageFor(m => m.UserName)
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group">
+				@Html.ValidationSummary(true)<br />
+				@Html.LabelFor(m => m.Password) <br />
+				@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password", type = "Password" } })
+				@Html.ValidationMessageFor(m => m.Password)
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group">
+				@Html.ValidationSummary(true)<br />
+				@Html.LabelFor(m => m.ConfirmPassword) <br />
+				@Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", placeholder = "ConfirmPassword", type = "Password" } })
+				@Html.ValidationMessageFor(m => m.ConfirmPassword)
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button id="btnModalSubmit" type="submit" class="btn btn-primary">Create</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	</div>
+}
+
