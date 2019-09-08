@@ -134,10 +134,12 @@ namespace WareHouse.Controllers
 					context.SaveChanges();
 
 					ViewBag.Message = "Quantity " + model.Quantity + " was added successfully. Total quantity now is: " + user.Quantity;
+					return Json(new { Error = false, Message = "Quantity " + model.Quantity + " was added successfully. Total quantity now is: " + user.Quantity }, JsonRequestBehavior.AllowGet);
 				}
+
+				return Json(new { Error = true, Message = "Error in adding quantity." }, JsonRequestBehavior.AllowGet);
 			}
 
-			return View();
 		}
 
 		[HttpPost]
