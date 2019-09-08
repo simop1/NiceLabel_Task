@@ -65,7 +65,7 @@ namespace WareHouse.Controllers
 				Session["UserName"] = user.UserName;
 				Session["UserID"] = user.UserID;
 
-				return RedirectToAction("Index", "Home");
+				return Json(new { Error = false, Message = "Logged in successfully." }, JsonRequestBehavior.AllowGet);
 			}
 		}
 
@@ -105,6 +105,7 @@ namespace WareHouse.Controllers
 		[HttpGet]
 		public ActionResult SendProduct()
 		{
+			if (Session["UserID"] == null) RedirectToAction("Login");
 			return View();
 		}
 
@@ -112,7 +113,8 @@ namespace WareHouse.Controllers
 		public ActionResult SendProduct(ProductQuantityModel model)
 		{
 			if (Session["UserID"] == null) RedirectToAction("Login");
-			if (model == null) return Json(new { Error = true, Message = "Quantity cannot be empty." }, JsonRequestBehavior.AllowGet);
+
+			if (model == null) return View();//return Json(new { Error = true, Message = "Quantity cannot be empty." }, JsonRequestBehavior.AllowGet);
 
 			using (var context = new WareHouseEntities())
 			{
@@ -123,10 +125,13 @@ namespace WareHouse.Controllers
 				{
 					user.Quantity += model.Quantity;
 					context.SaveChanges();
+
+					ViewBag.Message = "Quantity " + model.Quantity + " was added successfully. Total quantity now is: " + user.Quantity;
 				}
 			}
 
-			return View();
+
+			return View();//Json(new { Error = false, Message = "Quantity added successfully" }, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

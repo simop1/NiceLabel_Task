@@ -4,7 +4,7 @@
 }
 
 <div>
-	@using (Ajax.BeginForm("Login", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSubmitSuccess", OnFailure = "OnSubmitFailure", OnBegin = "ValidateForm" }))
+	@using (Ajax.BeginForm("Login", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSubmitSuccess", OnFailure = "OnSubmitFailure"}))
 	{
 		@Html.AntiForgeryToken()
 
@@ -48,16 +48,15 @@
 			if (data.Error == true) {
 				alert(data.Message);
 			}
-		}
-
-		function ValidateForm() {
-			return $('form').validate().form();
+			else {
+				alert(data.Message);
+				var url = '@Url.Action("Index", "Home")';
+				window.location.href = url;
+			}
 		}
 
 		function OnSubmitFailure(data) {
-			if (data.Error == true) {
-				alert(data.Message);
-			}
+			alert(data.Message);
 		}
 	</script>
 }
