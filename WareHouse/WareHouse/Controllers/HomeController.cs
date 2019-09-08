@@ -44,7 +44,7 @@ namespace WareHouse.Controllers
 
 			using (var context = new WareHouseEntities())
 			{
-				var user = context.Users.FirstOrDefault();
+				var user = context.Users.FirstOrDefault(x => x.UserName == model.UserName);
 				if (user == null) return Json(new { Error = true, Message = "Incorrect username or password." }, JsonRequestBehavior.AllowGet);
 
 				string inputHash = "";
@@ -153,7 +153,16 @@ namespace WareHouse.Controllers
 		[HttpPost]
 		public ActionResult SaveUser(NewUserModel model)
 		{
-			if (model == null) return Json(new { Error = true, Message = "Check the input fields." }, JsonRequestBehavior.AllowGet);
+			if (model == null) return Json(new { Error = true, Message = "Fill all the input fields." }, JsonRequestBehavior.AllowGet);
+
+			if(string.IsNullOrWhiteSpace(model.UserName) || string.IsNullOrWhiteSpace(model.Password) || string.IsNullOrWhiteSpace(model.ConfirmPassword))
+				return Json(new { Error = true, Message = "Fill all the input fields." }, JsonRequestBehavior.AllowGet);
+
+			if(model.Password.Length < 6)
+				return Json(new { Error = true, Message = "Password has to be at least 6 characters long." }, JsonRequestBehavior.AllowGet);
+
+			if (model.Password != model.ConfirmPassword)
+				return Json(new { Error = true, Message = "Confirm password does not match password." }, JsonRequestBehavior.AllowGet);
 
 			string hash = "";
 			using (MD5 md5Hash = MD5.Create())
